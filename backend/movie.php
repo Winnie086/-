@@ -4,8 +4,8 @@
 <div style="max-height:450px;overflow-y:auto">
 
 <?php
-      $movies=$Movie->all();
-      foreach($movies as $movie){
+      $movies=$Movie->all("order by rank");
+      foreach($movies as $key=>$movie){
 ?>
 <div style="background:#eee;color:#000;display:flex;margin:1px 0">
 
@@ -22,6 +22,22 @@
                   <div style="width:33%">上映時間:<?=$movie['year'];?>-<?=$movie['month'];?>-<?=$movie['day'];?></div>
             </div>
             <div style="float:right">
+            <button onclick="display('movie',<?=$movie['id'];?>)"><?=($movie==1)?'顯示':'隱藏';?></button>
+            <?php
+                if($key!=0){
+            ?>
+                <input type="button" value="往上" onclick="sw(<?=$movie['id'];?>,<?=$movie[$key-1]['id'];?>)">
+            <?php     
+                }
+            ?>
+
+            <?php
+                if($key!=(count($movies)-1)){
+            ?>
+                <input type="button" value="往下" onclick="sw(<?=$movie['id'];?>,<?=$movie[$key+1]['id'];?>)">
+            <?php
+            }
+            ?>
                   <button onclick="javascript:location.href='backend.php?do=edit_movie&id=<?=$movie['id'];?>'">編輯電影</button>
                   <button>刪除電影</button>
             </div>
@@ -33,7 +49,6 @@
 }
 ?>
 
-
 </div>
 
 </div>
@@ -42,8 +57,22 @@
 
 <script>
 function sw(idx,idy){
-      $.post('api/sw.php',{table:'poster',idx,idy},function(){
-       location.reload()
+      $.post('api/sw.php',{table:'movie',idx,idy},function(res){
+            console.log(res)
+      //  location.reload()
+      })
+}
+
+
+function del{
+      $.post('api/del.php',{table, id}, function(){
+            location.reload()
+      })
+}
+
+function display{
+      $.post('api/display.php',{table, id},function(){
+            location.reload()
       })
 }
 

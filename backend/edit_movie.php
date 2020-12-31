@@ -3,7 +3,7 @@ $movie=$Movie->find($_GET['id']);
 ?>
 
 <h3 class="ct" style="margin:0">編輯院線片</h3>
-<form action="api/add_movie.php" method="post" enctype="multipart/form-data">
+<form action="api/edit_movie.php" method="post" enctype="multipart/form-data">
   <table style="width:100%">
     <tr>
       <td width="20%" style="vertical-align:top;text-align:right;">影片資料</td>
@@ -22,6 +22,7 @@ $movie=$Movie->find($_GET['id']);
   
       <div>上映日期:
       <select name="year" id="">年
+        <option value="2020" <?=($movie['year']=="2020")?"selected":"";?>>2020</option>
         <option value="2021" <?=($movie['year']=="2021")?"selected":"";?>>2021</option>
         <option value="2022" <?=($movie['year']=="2022")?"selected":"";?>>2022</option>
       </select>

@@ -43,9 +43,9 @@
       <div>導演:<input type="text" name="director">
       </div>
   
-      <div><input type="file" name="trailer"></div>
+      <div>預告電影:<input type="file" name="trailer"></div>
       
-      <div><input type="file" name="poster"></div>
+      <div>電影海報:<input type="file" name="poster"></div>
       </td>
     </tr>
     <tr>
@@ -53,4 +53,11 @@
       <td><textarea name="intro" id="" style="width:98%;height:60px;"></textarea></td>
     </tr>
   </table>
+
+
+<div class="ct">
+        <input type="submit" value="新增">
+        <input type="reset" value="重置">
+</div>
+
 </form>

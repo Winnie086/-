@@ -15,6 +15,9 @@
 }
 .posters > div{
   position:absolute;
+  width:100%;
+  height:100%;
+  overflow:hidden;
 }
 .posters img{
   width:100%;
@@ -135,7 +138,6 @@ margin:auto;
               next=$("#p0")
             }
           }
-          
 
           switch(ani){
             case 1:
@@ -143,23 +145,45 @@ margin:auto;
               $(now).fadeOut(1000)
               $(next).fadeIn(1000)
             break;
+            
             case 2:
             //滑入滑出
-            //利用call back函式在滑出動作完成後才進行滑入的動畫
               $(now).slideUp(1000,function(){
                 $(next).slideDown(1000)
               })
             break;
+            
             case 3:
             //縮放
               $(now).hide(1000)
               $(next).show(1000)
             break;
+            
+            case 4:
+             //滑入滑出
+            //利用call back函式在滑出動作完成後才進行滑入的動畫
+
+            $(now).animate({left:-200},1000,function(){
+                $(this).hide()
+                $(this).css({left:0})
+              })
+              $(next).css({left:200})
+                $(next).show()
+                $(next).animate({left:0},1000)
+            break;
+
+            case 5:
+            //縮放
+            $(next).css({width:0,height:0,top:130,left:100});
+            $(now).animate({width:0,height:0,top:130,left:100},1000,function(){
+            $(this).hide();
+            $(this).css({width:200,height:260,left:0,top:0});
+              
+            })
 
           }
 
         }
-
      
         $(".btn").on("click",function(){
           let id=$(this).attr('id').replace("b","p");
@@ -168,7 +192,6 @@ margin:auto;
           ani($("#"+id));
           
         })
-
 
         $(".list").hover(
           function(){
@@ -182,9 +205,6 @@ margin:auto;
       </script>
 
 
-
-
-
     <div class="half">
       <h1>院線片清單</h1>
       <div class="rb tab" style="width:95%;display:flex;flex-wrap:wrap">
@@ -196,7 +216,6 @@ margin:auto;
       $div=4;
       $pages=ceil($total/$div);
       $now=$_GET['p']??1;
-      //$now=(isset($_GET['p']))?$_GET['p']:1;
       $start=($now-1)*$div;
 
       $movies=$Movie->all(['sh'=>1]," && `ondate` between '$startDate' and '$today' order by rank limit $start,$div");

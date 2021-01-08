@@ -1,149 +1,194 @@
 <style>
-.ct a {
-  text-decoration: none;
+.ct a{
+  text-decoration:none;
 }
-
-.ct a:hover {
-  text-decoration: underline;
+.ct a:hover{
+  text-decoration:underline;
 }
-
-.posters {
+.posters{
   width:200px;
   height:260px;
   margin:auto;
   text-align:center;
   position:relative;
-}
 
-/* >只有第一層會繼承 */
-.posters > div {
+}
+.posters > div{
   position:absolute;
 }
-
-.posters img {
+.posters img{
   width:100%;
+  
 }
-
-.buttons {
+.buttons{
   display:flex;
-  width:320px;
-  overflow:hidden;
+  width:400px;
+justify-content:center;
+align-items:center;
+margin:auto;
 }
 .list{
   display:flex;
   width:320px;
   overflow:hidden;
 }
-
-.buttons .btn {
- width:60px;
- height:80px;
- text-align:center;
- flex-shrink:0;
+.buttons .btn{
+  width:80px;
+  height:100px;
+  text-align:center;
+  flex-shrink:0;
+  position:relative;
+  font-size:12px;
 }
-
-.btn img {
+.btn img{
   width:70px;
-
 }
-.arrow {
-  width:40px;
+
+.arrow{
+  width:0;
+  height:0;
   border-top:20px solid transparent;
   border-bottom:20px solid transparent;
 }
 .arrow.left{
-border-right:20px solid transparent;
+  border-right:20px solid green;
 }
 .arrow.right{
-border-left:20px solid transparent;
+  border-left:20px solid green;
 }
-
 </style>
 <div class="half" style="vertical-align:top;">
-  <h1>預告片介紹</h1>
-  <div class="rb tab" style="width:95%;">
-    <div class="posters">
-    <?php
-    $posters=$Poster->all(['sh'=>1],"order by rank");
-    // print_r($posters);
+      <h1>預告片介紹</h1>
+      <div class="rb tab" style="width:95%;">
+      <div class="posters">
+      <?php
+        $posters=$Poster->all(['sh'=>1]," order by rank");
 
-    foreach($posters as $key => $poster){
-      echo "<div class='po' id='p{$key}' data-ani='{$poster['ani']}'>";
-      echo "<img src='img/{$poster['img']}'>";
-      echo "<span>{$poster['name']}</span>";
-      echo "</div>";
-    }
+        foreach($posters as $key => $poster){
+          echo "<div class='po' id='p{$key}' data-ani='{$poster['ani']}'>";
+          echo "<img src='img/{$poster['img']}'>";
+          echo "<span>{$poster['name']}</span>";
+          echo "</div>";
+        }
 
-    ?>
-    
+      ?>
+
+      </div>
+      <div class="buttons">
+      <div class="arrow left"></div>
+      <div class="list">
+      <?php
+
+        foreach($posters as $key => $poster){
+          echo "<div class='btn' id='b{$key}' data-ani='{$poster['ani']}'>";
+          echo "<img src='img/{$poster['img']}'>";
+          echo "<span style='display:block'>{$poster['name']}</span>";
+          echo "</div>";
+        }
+
+      ?>
     </div>
-    <div class="buttons">
-    <div class="arraw left"></div>
-  <?php
-    $posters=$Poster->all(['sh'=>1],"order by rank");
-    // print_r($posters);
+      <div class="arrow right"></div>
 
-    foreach($posters as $key => $poster){
-      echo "<div class='po' id='p{$key}' data-ani='{$poster['ani']}'>";
-      echo "<img src='img/{$poster['img']}'>";
-      echo "<span style='display:block'>{$poster['name']}</span>";
-      echo "</div>";
-    }
-
-    ?>
-
-    <div class="arrow right"></div>
-
+      </div>
+      </div>
     </div>
-  </div>
-</div>
+      <script>
+        let p=0;
+        let pos=$(".po").length;
 
-<script>
-  $(".po").hide();
-  $("#p0").show();
-  let pos=<?=count($posters);?>;
-  let t=setInterval('ani()',2000); 
+        $(".arrow").on("click",function(){
+          if($(this).hasClass('right')){
+            //點右邊
+            if((p+1)<=(pos-4)){
+                p++;
+            }
+          }else{
+            //點左邊
+            if((p-1) >= 0){
+              p--;
+            }
+          }
 
-  function ani(){
-    let now=$(".po:visible");
-    let ani=$(now).data('ani');
-    let next
-    if($(now).next().length){
-      next=$(now).next()
-    }else{
-      next=$("#p0")
-    }
-    console.log(typeof(ani));
+           $(".btn").animate({right:p*80})
 
-    switch(ani){
-      case 1:
-        //淡入淡出
-        $(now).fadeOut(1000)
-        $(next).fadeIn(1000)
-      break;
-      
-      case 2:
-        //滑入滑出
-        $(now).slideUp(1000,function(){
-        $(next).slideDown(1000)
-      })
-      break;
-      
-      case 3:
-        //縮放
-        $(now).hide(1000)
-        $(next).show(1000)
-      break;
-    }
-  }
-  
+        })
 
-</script>
 
-<div class="half">
-  <h1>院線片清單</h1>
-  <div class="rb tab" style="width:95%;display:flex;flex-wrap:wrap">
-    <?php
+        $(".po").hide();
+        $("#p0").show();
+
+        let t=setInterval('ani()', 2500);
+
+        function ani(next){
+          
+          let now=$(".po:visible")
+
+          let ani=$(now).data('ani');
+
+
+          if(next==undefined){
+            if($(now).next().length){  
+              next=$(now).next()
+            }else{
+              
+              next=$("#p0")
+            }
+          }
+          
+
+          switch(ani){
+            case 1:
+              //淡入淡出
+              $(now).fadeOut(1000)
+              $(next).fadeIn(1000)
+            break;
+            case 2:
+            //滑入滑出
+            //利用call back函式在滑出動作完成後才進行滑入的動畫
+              $(now).slideUp(1000,function(){
+                $(next).slideDown(1000)
+              })
+            break;
+            case 3:
+            //縮放
+              $(now).hide(1000)
+              $(next).show(1000)
+            break;
+
+          }
+
+        }
+
+     
+        $(".btn").on("click",function(){
+          let id=$(this).attr('id').replace("b","p");
+          //$(".po").hide();
+          
+          ani($("#"+id));
+          
+        })
+
+
+        $(".list").hover(
+          function(){
+            clearInterval(t)
+          },
+          function(){
+            t=setInterval('ani()',2500)
+          }
+        )
+
+      </script>
+
+
+
+
+
+    <div class="half">
+      <h1>院線片清單</h1>
+      <div class="rb tab" style="width:95%;display:flex;flex-wrap:wrap">
+      <?php
       $today=date("Y-m-d");
       $startDate=date("Y-m-d",strtotime("-2 days",strtotime($today)));
 
@@ -159,31 +204,30 @@ border-left:20px solid transparent;
       
       foreach($movies as $movie){
 
-       ?>
-    <div style="width:48%;border:1px solid #ccc;margin:0.5%">
-      <div>片名:<?=$movie['name'];?></div>
-      <div style="display:flex">
-        <a href="javascript:location.href='index.php?do=intro&id=<?=$movie['id'];?>'"><img
-            src="img/<?=$movie['poster'];?>" style="width:80px;height:100px;"></a>
-        <div>分級:
-          <img src="icon/<?=$movie['level'];?>.png" alt=""><?=$movie['level'];?><br>
-          上映日期:<?=$movie['year']."-".$movie['month']."-".$movie['day'];?>
-        </div>
+       ?>   
+      <div style="width:48%;border:1px solid #ccc;margin:0.5%">
+          <div>片名:<?=$movie['name'];?></div>
+          <div style="display:flex">
+            <a href="javascript:location.href='index.php?do=intro&id=<?=$movie['id'];?>'"><img src="img/<?=$movie['poster'];?>" style="width:80px;height:100px;"></a>
+            <div>分級:
+              <img src="icon/<?=$movie['level'];?>.png" alt=""><?=$movie['level'];?><br>
+              上映日期:<?=$movie['year']."-".$movie['month']."-".$movie['day'];?>
+            </div>
+          </div>
+          <div>
+            <button onclick="javascript:location.href='index.php?do=intro&id=<?=$movie['id'];?>'">劇情簡介</button>
+            <button onclick="javascript:location.href='index.php?do=order&id=<?=$movie['id'];?>'">線上訂票</button>
+          </div>
+      
       </div>
-      <div>
-        <button onclick="javascript:location.href='index.php?do=intro&id=<?=$movie['id'];?>'">劇情簡介</button>
-        <button onclick="javascript:location.href='index.php?do=order&id=<?=$movie['id'];?>'">線上訂票</button>
-      </div>
-
-    </div>
-    <?php
+      <?php
       
       }
     ?>
-  </div>
-  <div class="ct">
+      </div>
+        <div class="ct">
 
-    <?php
+        <?php
           if(($now-1)>0){
             echo "<a href='?p=".($now-1)."'> &lt; </a>";
 
@@ -199,5 +243,5 @@ border-left:20px solid transparent;
 
         }
         ?>
-  </div>
-</div>
+        </div>
+    </div>

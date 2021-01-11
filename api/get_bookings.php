@@ -77,7 +77,7 @@ $session=$_GET['session'];
   <div>您已經勾選<span id='ticket'></span>張票，最多可以購買四張票</div>
   <div class="ct">
     <button onclick="javascript:$('.order,.booking').toggle()">上一步</button>
-    <button>訂購</button>
+    <button onclick="finish()">訂購</button>
   </div>
 </div>
 
@@ -111,7 +111,8 @@ function finish(){
   let date=$("#date").val()
   let session=$("#session").val()
 
-  $.post("api/finish_order.php",{seats,movie,date,session},function(){
+  $.post("api/finish_order.php",{seats,movie,date,session},function(num){
+    console.log(num)
      location.href="index.php?do=finish&num="+num;
   })
 

@@ -4,7 +4,7 @@
     <table>
       <tr>
         <td>文章標題</td>
-        <td><input type="text" name="title" id="title"></td>
+        <td><input type="text" name="txt_title" id="txt_title"></td>
       </tr>
       <tr>
         <td>文章分類</td>
@@ -30,14 +30,15 @@
 
 <script>
 function add_text(){
-  let title=$("#title").val()
+  let txt_title=$("#txt_title").val()
   let type=$("#type").val()
   let text=$("#text").val()
+  console.log(txt_title,type,text)
 
   if(title=="" || text==""){
     alert("不可空白")
   }else{
-    $.post("api/add_text.php",{title,type,text},function(res){
+    $.post("api/add_text.php",{txt_title,type,text},function(res){
       console.log(res)
       alert("新增完成")
     })

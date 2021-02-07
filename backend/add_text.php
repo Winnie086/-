@@ -9,7 +9,7 @@
       <tr>
         <td>文章分類</td>
         <td>
-            <select>
+            <select id="type">
             <option selected="selected" value="1">健康新知</option>
             <option value="2">菸害防制</option>
             <option value="3">癌症防治</option>
@@ -37,7 +37,7 @@ function add_text(){
   if(title=="" || text==""){
     alert("不可空白")
   }else{
-    $.get("api/add_text.php",{title,type,text},function(res){
+    $.post("api/add_text.php",{title,type,text},function(res){
       console.log(res)
       alert("新增完成")
     })

@@ -30,7 +30,7 @@
 
 <script>
 function add_text(){
-  let txt_title=$("#txt_title").val()
+  let title=$("#txt_title").val()
   let type=$("#type").val()
   let text=$("#text").val()
   console.log(txt_title,type,text)
@@ -38,7 +38,7 @@ function add_text(){
   if(title=="" || text==""){
     alert("不可空白")
   }else{
-    $.post("api/add_text.php",{txt_title,type,text},function(res){
+    $.post("api/add_text.php",{title,type,text},function(res){
       console.log(res)
       alert("新增完成")
     })

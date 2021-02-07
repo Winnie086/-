@@ -111,7 +111,7 @@ class DB{
             //insert
 
             $sql="insert into $this->table (`".implode("`,`",array_keys($arg))."`) values('".implode("','",$arg)."')";
-
+            // echo $sql;
         }
 
         return $this->pdo->exec($sql);
